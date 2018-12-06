@@ -99,12 +99,10 @@ int MDebyeSolver::JacobiIterativeSolve (double err_threshold, MField3D & res_con
             break;
         }
         for (int i = slice_offset; i < slice_offset + slice_rows; i++) x_next[i] = pfield_[i];
-        cblas_dgemv(CblasRowMajor, CblasNoTrans, slice_rows, ntrim, -1.0, pAmat_->Buffer(), ntrim, x_prev, 1, 1.0, x_next + slice_offset, 1);
+
+        MatMul(x_prev, slice_rows, ntrim, slice_offset, x_next);
         for (int i = slice_offset; i < slice_offset + slice_rows; i++) {
             int slice_i = i - slice_offset;
-            // for (int j = 0; j < i; j++) x_next[i] -= pAmat_->Elem(slice_i, j) * x_prev[j];
-            // for (int j = i + 1; j < ntrim; j++) x_next[i] -= pAmat_->Elem(slice_i, j) * x_prev[j];
-
             x_next[i] += pAmat_->Elem(slice_i, i) * x_prev[i];
             x_next[i] /= pAmat_->Elem(slice_i, i);
             double newerr = fabs(x_next[i] - x_prev[i]);
@@ -133,6 +131,10 @@ int MDebyeSolver::JacobiIterativeSolve (double err_threshold, MField3D & res_con
     delete[] aux_vector1;
     delete[] aux_vector2;
     return iter_cnt;
+}
+
+void MDebyeSolver::MatMul(const double * x_prev, int M, int N, int slice_offset, double * x_next) {
+    cblas_dgemv(CblasRowMajor, CblasNoTrans, M, N, -1.0, pAmat_->Buffer(), N, x_prev, 1, 1.0, x_next + slice_offset, 1);
 }
 
 void MDebyeSolver::RhsInput (MField3D const & field) {

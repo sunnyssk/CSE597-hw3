@@ -69,6 +69,8 @@ protected:
 
     MMatD * pAmat_;
     double * pfield_;
+
+    void MatMul(const double * x_prev, int M, int N, int slice_offset, double * x_next);
 };
 
 #endif /* _DEBYE_MPI_H_ */
