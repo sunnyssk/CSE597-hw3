@@ -8,8 +8,8 @@ NAME = MKLJacobi
 
 CC = tau_cxx.sh    # for profiling
 # CC = mpicxx    # for regular executing
-MKL_INCLUDE_PATH = /d/libs/mkl2018-1-build/mkl/include
-MKL_LIB_PATH = /d/libs/mkl2018-1-build/mkl/lib/intel64
+MKL_INCLUDE_PATH = /opt/intel/compilers_and_libraries_2016.3.210/linux/mkl/include
+MKL_LIB_PATH = /opt/intel/compilers_and_libraries_2016.3.210/linux/mkl/lib/intel64/
 
 CFLAGS = -O2 -mfma -mavx -std=c++11 -Wno-unused-result -g -I$(MKL_INCLUDE_PATH) -DMKL_ILP64 -m64
 LFLAGS = -lm -Wl,--no-as-needed -L$(MKL_LIB_PATH) -Wl,--start-group -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -Wl,--end-group -lpthread

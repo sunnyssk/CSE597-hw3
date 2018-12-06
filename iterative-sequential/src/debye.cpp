@@ -71,10 +71,11 @@ int DebyeSolver::JacobiIterativeSolve (double err_threshold, Field3D & res_conta
             std::cout << "Iteration number exceeds limit! Exit automatically." << std::endl;
             break;
         }
+        for (int i = 0; i < n; i++) (*x_next)(i) = (*pfield_)(i);
+
+        MatMul(x_prev, n, n, x_next);
         for (int i = 0; i < n; i++) {
-            (*x_next)(i) = (*pfield_)(i);
-            for (int j = 0; j < i; j++) (*x_next)(i) -= (*pAmat_)(i, j) * (*x_prev)(j);
-            for (int j = i + 1; j < n; j++) (*x_next)(i) -= (*pAmat_)(i, j) * (*x_prev)(j);
+            (*x_next)(i) += (*pAmat_)(i, i) * (*x_prev)(i);
             (*x_next)(i) /= (*pAmat_)(i, i);
             double newerr = fabs((*x_next)(i) - (*x_prev)(i));
             errmax = errmax > newerr ? errmax : newerr;
@@ -120,6 +121,11 @@ void DebyeSolver::RhsInput (Field3D const & field) {
         for (int j = 1; j <= nytrim; j++)
             for (int k = 1; k <= nztrim; k++) rhs(TRI(i, j, k)) = field(i, j, k);
     #undef TRI
+}
+
+void DebyeSolver::MatMul (const MatD * x_prev, int M, int N, MatD * x_next) {
+    for (int i = 0; i < M; i++)
+        for (int j = 0; j < N; j++) (*x_next)(i) -= (*pAmat_)(i, j) * (*x_prev)(j);
 }
 
 void DebyeSolver::SolverMatrixDecompose () {

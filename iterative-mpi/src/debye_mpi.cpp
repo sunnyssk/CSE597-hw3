@@ -98,11 +98,12 @@ int MDebyeSolver::JacobiIterativeSolve (double err_threshold, MField3D & res_con
             std::cout << "Iteration number exceeds limit! Exit automatically." << std::endl;
             break;
         }
+        for (int i = slice_offset; i < slice_offset + slice_rows; i++) x_next[i] = pfield_[i];
+
+        MatMul(x_prev, slice_rows, ntrim, slice_offset, x_next);
         for (int i = slice_offset; i < slice_offset + slice_rows; i++) {
-            x_next[i] = pfield_[i];
             int slice_i = i - slice_offset;
-            for (int j = 0; j < i; j++) x_next[i] -= pAmat_->Elem(slice_i, j) * x_prev[j];
-            for (int j = i + 1; j < ntrim; j++) x_next[i] -= pAmat_->Elem(slice_i, j) * x_prev[j];
+            x_next[i] += pAmat_->Elem(slice_i, i) * x_prev[i];
             x_next[i] /= pAmat_->Elem(slice_i, i);
             double newerr = fabs(x_next[i] - x_prev[i]);
             errmax = errmax > newerr ? errmax : newerr;
@@ -130,6 +131,11 @@ int MDebyeSolver::JacobiIterativeSolve (double err_threshold, MField3D & res_con
     delete[] aux_vector1;
     delete[] aux_vector2;
     return iter_cnt;
+}
+
+void MDebyeSolver::MatMul (const double * x_prev, int M, int N, int slice_offset, double * x_next) {
+    for (int i = slice_offset; i < slice_offset + M; i++)
+        for (int j = 0; j < N; j++) x_next[i] -= pAmat_->Elem(i - slice_offset, j) * x_prev[j];
 }
 
 void MDebyeSolver::RhsInput (MField3D const & field) {

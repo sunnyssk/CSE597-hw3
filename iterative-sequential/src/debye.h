@@ -70,6 +70,8 @@ protected:
     MatD *pUmat_;
 
     DebyeSolver(DebyeSolver const & src) {}
+
+    void MatMul (const MatD * x_prev, int M, int N, MatD * x_next);
 };
 
 void WriteArray (FILE * output_file, double * array, int length);
