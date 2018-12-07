@@ -16,9 +16,9 @@ Depending on whether you want to use the profiling tool or not, the compiling pr
 
 ### Compile without profile
 
-If you want to use the program without profiling, then switch to the folder `mpi-withmkl`, open `Makefile`, uncomment the line with `CC=mpicxx`, and comment the line `CC=tau_cxx.sh`.
+If you want to use the program without profiling, please switch to the folder `mpi-withmkl`, then open `Makefile`, uncomment the line with `CC=mpicxx`, and comment the line `CC=tau_cxx.sh`.
 
-Now save and quit the editor. Load the modules `gcc/5.3.1`, `mkl` and `openmpi` (with the default version) and then type
+Now save and quit the editor. Load the modules `gcc/5.3.1`, `mkl` and `openmpi` (with the default version) and modify the `MKL_INCLUDE_PATH` and `MKL_LIB_PATH` to the expected paths. Then execute
 
     make clean
     make
@@ -36,14 +36,14 @@ If you want to use the program with profiling, the you should uncomment the line
     module use /storage/work/a/awl5173/toShare/tauPdt/tau
     module load adamsTau_2.27
 
-or any other version of `tau` with supporting of openmpi if you have one.
+or any other version of `tau` with supporting of openmpi if you have one. The requests for MKL library and include paths are the same as compiling without profiling tool.
 
 To start compiling, type
 
     make clean
     make
 
-It is possible that the profiler generates much info and requires you to type ENTER for multiple times during the compilation. If you do not see any error reported by the compiler (rather than profiler), and the link appears to be successful, then the program will be ready for use.
+It is possible that the profiler generates much info and requires you to type ENTER for multiple times during the compilation. If you do not see any error reported by the compiler (rather than profiler), and the link appears to be successful, then the program will be ready to use.
 
 ## Usage
 
@@ -63,7 +63,7 @@ The program will show the specific iteration steps taken in solving the problems
 
 ## Instructions for Code without MKL
 
-To compile and run the codes without MKL support in `iterative-mpi` and `iterative-sequential`, see `iterative-instructions.md`.
+To compile and run the iterative solver codes without MKL support in `iterative-mpi` and `iterative-sequential`, see `iterative-instructions.md`.
 
 ## Instructions for Sequential Solvers
 
