@@ -18,7 +18,7 @@ Depending on whether you want to use the profiling tool or not, the compiling pr
 
 If you want to use the program without profiling, please switch to the folder `mpi-withmkl`, then open `Makefile`, uncomment the line with `CC=mpicxx`, and comment the line `CC=tau_cxx.sh`.
 
-Now save and quit the editor. Load the modules `gcc/5.3.1`, `mkl` and `openmpi` (with the default version) and modify the `MKL_INCLUDE_PATH` and `MKL_LIB_PATH` to the expected paths. Then execute
+Now save and quit the editor. Load the modules `gcc/5.3.1`, `mkl` and `openmpi` (with the default version) and modify the `MKL_INCLUDE_PATH` and `MKL_LIB_PATH` in Makefile to the expected paths. Then execute
 
     make clean
     make
